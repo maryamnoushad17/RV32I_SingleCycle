@@ -11,7 +11,7 @@ module instr_mem (
         for (i = 0; i < 256; i = i + 1)
             mem[i] = 32'h00000013;
         // load program from hex file
-        $readmemh("program.hex", mem);
+        $readmemh("C:/Users/User/Desktop/RISCV/RV32I_SingleCycle/sw/compiled_hex/program.hex", mem);
     end
 
     // PC counts in bytes (0,4,8..), memory is word-addressed, so drop 2 LSBs
