@@ -1,7 +1,8 @@
 // Single-cycle RV32I core: connects all modules
 module core_top (
     input clk,
-    input rst
+    input rst,
+	 output [31:0] debug_out
 );
     wire [31:0] pc, pc_next, pc_plus4, pc_target;
     wire [31:0] instr, imm;
@@ -23,10 +24,9 @@ module core_top (
     wire [6:0] funct7 = instr[31:25];
 
     // FETCH
-    pc u_pc (.clk(clk), .rst(rst), .pc_next(pc_next), .pc(pc));
+    pc u_pc (.clk(clk), .rst(rst), .pc_next(pc_next), .pc_out(pc), .pc_plus4(pc_plus4));
     instr_mem u_imem (.addr(pc), .instr(instr));
-    assign pc_plus4 = pc + 32'd4;
-
+    
     // DECODE
     control u_ctrl (
         .opcode(opcode), .funct3(funct3), .funct7(funct7),
@@ -62,4 +62,5 @@ module core_top (
     assign pc_next = jalr ? {alu_result[31:1], 1'b0} :
                      (jump | branch_taken) ? pc_target :
                      pc_plus4;
+	assign debug_out = wb_data;
 endmodule
