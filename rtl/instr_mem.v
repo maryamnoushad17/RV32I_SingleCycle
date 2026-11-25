@@ -1,19 +1,18 @@
-// Instruction Memory: ROM, 256 words (1 KB)
 module instr_mem (
-    input  [31:0] addr,     // byte address from PC
-    output [31:0] instr
+    input  wire [31:0] addr,     // PC se aata hai (byte address)
+    output wire [31:0] instr     // 32-bit instruction
 );
-    reg [31:0] mem [0:255];
+    reg [31:0] mem [0:255];      // 256 words = 1 KB
     integer i;
 
     initial begin
-        // fill with NOP (addi x0,x0,0) so unused locations are safe
+        // pehle sab jagah NOP (addi x0,x0,0)
         for (i = 0; i < 256; i = i + 1)
             mem[i] = 32'h00000013;
-        // load program from hex file
-        $readmemh("C:/Users/User/Desktop/RISCV/RV32I_SingleCycle/sw/compiled_hex/program.hex", mem);
+
+        $readmeh("program.hex" mem);
     end
 
-    // PC counts in bytes (0,4,8..), memory is word-addressed, so drop 2 LSBs
+    // PC byte address hai, memory word hai, isliye addr[1:0] chhod do
     assign instr = mem[addr[9:2]];
 endmodule
