@@ -10,7 +10,8 @@ module instr_mem (
         for (i = 0; i < 256; i = i + 1)
             mem[i] = 32'h00000013;
 
-        $readmeh("program.hex" mem);
+        $readmeh("program.hex", mem);
+		  
     end
 
     // PC byte address hai, memory word hai, isliye addr[1:0] chhod do
